@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'CustomDataset'
-data_root = 'data/pascal_person_part'
+data_root = '/mnt/server14_hard0/msson/datasets/Pascal Part Person'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (480, 480)
@@ -37,18 +37,18 @@ data = dict(
     train=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='img_dir/train',
-        ann_dir='ann_dir/train',
+        img_dir='train/image',
+        ann_dir='train/segmentation',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='img_dir/val',
-        ann_dir='ann_dir/val',
+        img_dir='val/image',
+        ann_dir='val/segmentation',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='img_dir/val',
-        ann_dir='ann_dir/val',
+        img_dir='val/image',
+        ann_dir='val/segmentation',
         pipeline=test_pipeline))

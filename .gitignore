@@ -115,3 +115,5 @@ work_dirs/
 
 # pytorch 
 *.pth
+
+.vscode*
