@@ -117,3 +117,9 @@ work_dirs/
 *.pth
 
 .vscode*
+
+# weight 
+deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.pth
+
+# Resluts
+Results/
