@@ -10,6 +10,28 @@ import torch.distributed as dist
 import torch.nn as nn
 from mmcv.runner import auto_fp16
 
+def get_palette(num_cls):
+    """ Returns the color map for visualizing the segmentation mask.
+    Args:
+        num_cls: Number of classes
+    Returns:
+        The color map
+    """
+    n = num_cls
+    palette = [0] * (n * 3)
+    for j in range(0, n):
+        lab = j
+        palette[j * 3 + 0] = 0
+        palette[j * 3 + 1] = 0
+        palette[j * 3 + 2] = 0
+        i = 0
+        while lab:
+            palette[j * 3 + 0] |= (((lab >> 0) & 1) << (7 - i))
+            palette[j * 3 + 1] |= (((lab >> 1) & 1) << (7 - i))
+            palette[j * 3 + 2] |= (((lab >> 2) & 1) << (7 - i))
+            i += 1
+            lab >>= 3
+    return palette
 
 class BaseSegmentor(nn.Module):
     """Base class for segmentors."""
@@ -19,6 +41,8 @@ class BaseSegmentor(nn.Module):
     def __init__(self):
         super(BaseSegmentor, self).__init__()
         self.fp16_enabled = False
+        self.CLASSES = ('background', 'head', 'torso', 'u-arm', 'l-arm', 'u-leg', 'l-leg')
+        self.PALETTE = get_palette(len(self.CLASSES))
 
     @property
     def with_neck(self):
@@ -241,7 +265,8 @@ class BaseSegmentor(nn.Module):
                     0, 255, size=(len(self.CLASSES), 3))
             else:
                 palette = self.PALETTE
-        palette = np.array(palette)
+        palette = np.array(palette).reshape(len(self.CLASSES),-1)      
+                  
         assert palette.shape[0] == len(self.CLASSES)
         assert palette.shape[1] == 3
         assert len(palette.shape) == 2
@@ -251,7 +276,7 @@ class BaseSegmentor(nn.Module):
         # convert to BGR
         color_seg = color_seg[..., ::-1]
 
-        img = img * 0.5 + color_seg * 0.5
+        img = img * 0.5 + color_seg * 0.5 # image-seg ratio
         img = img.astype(np.uint8)
         # if out_file specified, do not show image in window
         if out_file is not None:
