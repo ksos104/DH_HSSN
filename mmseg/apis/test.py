@@ -122,6 +122,27 @@ def single_gpu_test(model,
         list: The prediction results.
     """
 
+    # for i, data in enumerate(data_loader):
+    #     data_first = data['img_metas']
+    #     break
+
+    # import time
+    # model.eval()
+    # time_sum = 0.0
+    # tensors_2k = torch.rand(1000, 3, 2048, 1024)
+    # for i in range(1000):
+    #     data = tensors_2k[i,...].unsqueeze(dim=0)
+    #     datas = dict()
+    #     datas['img_metas'] = data_first
+    #     datas['img'] = [data]
+    #     start_time = time.time()
+    #     result = model(return_loss=False, **datas)
+    #     end_time = time.time()
+    #     process_time = end_time - start_time
+    #     time_sum += process_time
+    # print("avg time: ", (time_sum / 1000))
+    # return
+
     model.eval()
     results = []
     dataset = data_loader.dataset

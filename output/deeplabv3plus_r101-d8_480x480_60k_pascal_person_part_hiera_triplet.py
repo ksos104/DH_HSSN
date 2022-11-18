@@ -27,10 +27,7 @@ model = dict(
         norm_cfg=dict(type='SyncBN', requires_grad=True),
         align_corners=False,
         loss_decode=dict(
-            type='RMIHieraTripletLoss',
-            use_sigmoid=False,
-            loss_weight=1.0,
-            num_classes=7)),
+            type='RMIHieraTripletLoss', loss_weight=1.0, num_classes=7)),
     auxiliary_head=dict(
         type='FCNHead',
         in_channels=1024,
@@ -47,7 +44,7 @@ model = dict(
     train_cfg=dict(),
     test_cfg=dict(mode='whole', is_hiera=True, hiera_num_classes=5))
 dataset_type = 'CustomDataset'
-data_root = '/mnt/server14_hard0/msson/datasets/Pascal Part Person'
+data_root = '/mnt/server14_hard1/msson/datasets/Pascal Part Person'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (480, 480)
@@ -86,11 +83,11 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=6,
     workers_per_gpu=4,
     train=dict(
         type='CustomDataset',
-        data_root='/mnt/server14_hard0/msson/datasets/Pascal Part Person',
+        data_root='/mnt/server14_hard1/msson/datasets/Pascal Part Person',
         img_dir='train/image',
         ann_dir='train/segmentation',
         pipeline=[
@@ -111,7 +108,7 @@ data = dict(
         ]),
     val=dict(
         type='CustomDataset',
-        data_root='/mnt/server14_hard0/msson/datasets/Pascal Part Person',
+        data_root='/mnt/server14_hard1/msson/datasets/Pascal Part Person',
         img_dir='val/image',
         ann_dir='val/segmentation',
         pipeline=[
@@ -134,7 +131,7 @@ data = dict(
         ]),
     test=dict(
         type='CustomDataset',
-        data_root='/mnt/server14_hard0/msson/datasets/Pascal Part Person',
+        data_root='/mnt/server14_hard1/msson/datasets/Pascal Part Person',
         img_dir='val/image',
         ann_dir='val/segmentation',
         pipeline=[
@@ -165,9 +162,9 @@ workflow = [('train', 1)]
 cudnn_benchmark = True
 optimizer = dict(type='SGD', lr=0.007, momentum=0.9, weight_decay=5e-05)
 optimizer_config = dict()
-lr_config = dict(policy='poly', power=0.9, min_lr=5e-05, by_epoch=False)
+lr_config = dict(policy='poly', power=0.9, min_lr=5e-07, by_epoch=False)
 runner = dict(type='IterBasedRunner', max_iters=60000)
 checkpoint_config = dict(by_epoch=False, interval=6000)
-evaluation = dict(interval=6000, metric='mIoU')
+evaluation = dict(interval=5999, metric='mIoU')
 work_dir = 'output'
 gpu_ids = range(0, 1)

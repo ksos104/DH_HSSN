@@ -53,6 +53,7 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--npt', type=bool, default=True)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -93,6 +94,7 @@ def main():
     else:
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
+        
 
     # create work_dir
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
@@ -131,6 +133,11 @@ def main():
         cfg.model,
         train_cfg=cfg.get('train_cfg'),
         test_cfg=cfg.get('test_cfg'))
+
+    ## Backbone freeze
+    # for name, param in model.named_parameters():
+    #     if 'backbone' in name:
+    #         param.requires_grad = False
 
     logger.info(model)
 

@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from ..builder import LOSSES
 from .hiera_loss import prepare_targets, losses_hiera_focal, losses_hiera
 from .cross_entropy_loss import CrossEntropyLoss
+from .dice_loss import DiceLoss
 
 TORCH_VERSION = torch.__version__[:3]
 
@@ -146,6 +147,7 @@ class RMIHieraTripletLoss(nn.Module):
         self.d = 2 * self.half_d
         self.kernel_padding = self.rmi_pool_size // 2
         self.ce = CrossEntropyLoss()
+        self.dice = DiceLoss()
         self.treetripletloss = TreeTripletLoss(self.num_classes, self.upper_ids, self.lower_ids)
 
     def forward(self,
@@ -169,11 +171,12 @@ class RMIHieraTripletLoss(nn.Module):
         new_targets = torch.cat([targets_, targets_middle_, targets_top_], dim=1)   
         
         rmi_loss = self.forward_sigmoid(cls_score, new_targets, valid_indices, self.num_classes)
-        ce_loss = self.ce(cls_score[:,:-5],label)
+        # dice_loss = self.dice(cls_score[:,:-5],label)
         ce_loss2 = self.ce(cls_score[:,-5:-2],targets_middle)
         ce_loss3 = self.ce(cls_score[:,-2:],targets_top)
         
-        loss = 0.5*rmi_loss + 0.5*hiera_loss + ce_loss + ce_loss2 + ce_loss3
+        loss = 0.5*rmi_loss + 0.5*hiera_loss + ce_loss2 + ce_loss3
+        # loss = 0.5*rmi_loss + 0.5*hiera_loss + dice_loss + ce_loss2 + ce_loss3
         
         loss_triplet, class_count = self.treetripletloss(embedding, label)
         class_counts = [torch.ones_like(class_count) for _ in range(torch.distributed.get_world_size())]

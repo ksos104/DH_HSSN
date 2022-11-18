@@ -1,6 +1,8 @@
 # dataset settings
 dataset_type = 'CustomDataset'
-data_root = '/mnt/server14_hard0/msson/datasets/Pascal Part Person'
+data_root = '/mnt/server14_hard1/msson/datasets/Pascal Part Person'
+# data_root = '/mnt/server14_hard1/msson/datasets/SURREAL/data/ref_cmu'
+# data_root = '/mnt/server14_hard1/msson/datasets/Syn_body/no_gt'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (480, 480)
@@ -32,7 +34,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=6,
     workers_per_gpu=4,
     train=dict(
         type=dataset_type,
@@ -49,6 +51,8 @@ data = dict(
     test=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='val/image',
-        ann_dir='val/segmentation',
+        # img_dir='val/image',
+        # ann_dir='val/segmentation',
+        img_dir='samples/image',
+        ann_dir='samples/segmentation',
         pipeline=test_pipeline))
