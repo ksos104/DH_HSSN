@@ -9,6 +9,15 @@ This repo contains the unoffical supported code and configuration files to repro
 | Pascal-Person-Part | ResNet101 | 480x480 | 73.44 | 75.4 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py) |
 
 
+
+single scale             |  multi scale w/ flipping
+:-------------------------:|:-------------------------:
+![single](https://user-images.githubusercontent.com/66418958/205012632-647389ca-8aca-41f7-9b9c-6f4236dc0462.png)  |  ![multi](https://user-images.githubusercontent.com/66418958/205012141-4713416d-b125-4145-9111-de41e25cd00c.png)
+
+
+
+
+
 ## Usage
 
 ### Installation 
