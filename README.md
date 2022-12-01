@@ -2,18 +2,12 @@
 
 This repo contains the unoffical supported code and configuration files to reproduce semantic segmentaion results of [HieraSeg](https://arxiv.org/abs/2203.14335). It is based on [mmsegmentaion](https://github.com/open-mmlab/mmsegmentation).
 
-## Updates
-
- - [2022-06-02] Initial commits
-
 ## Results and Models
 
-| Dataset | Backbone | Crop Size | mIoU (single scale) | config | log | model |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Cityscapes | Resnet101 | 512x1024 | 81.62 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_512x1024_80k_cityscapes_hiera_triplet.py) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_512x1024_80k_cityscapes_hiera_triplet.log) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_512x1024_80k_cityscapes_hiera_triplet.pth) |
-| Pascal-Person-Part | ResNet101 | 480x480 | 73.44 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.log) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.pth) |
-| LIP | ResNet101 | 480x480 | 58.71 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_160k_LIP_hiera_triplet.py) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_480x480_160k_LIP_hiera_triplet.log) | [github](https://github.com/qhanghu/HSSN_pytorch/releases/download/1.0/deeplabv3plus_r101-d8_480x480_160k_LIP_hiera_triplet.pth) |
-| Mapillary Vistas 2.0 | ResNet101 | 512x1024 | In progress | - | - | - |
+| Dataset | Backbone | Crop Size | mIoU (single scale) | mIoU (multi scale w/ flipping) | config |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| Pascal-Person-Part | ResNet101 | 480x480 | 73.44 | 75.4 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py) |
+
 
 ## Usage
 
@@ -55,14 +49,6 @@ For example, to train on Cityscapes with a `ResNet-101` backbone and 4 gpus, run
 tools/dist_train.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_512x1024_80k_cityscapes_hiera_triplet.py.py 4 
 ```
 
-**Notes:** 
-- We use four Tesla A100 GPUs for training. CUDA version: 11.1.
-
-## TODO
-- [x] Code release
-- [x] Checkpoint release
-- [ ] Implementation for Mapillary Vistats 2.0
-- [ ] HRNet and Swin-Transformer backbone
 
 ## Citing HieraSeg
 ```BibTeX
