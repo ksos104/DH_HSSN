@@ -12,7 +12,6 @@ from .base import BaseSegmentor
 @SEGMENTORS.register_module()
 class EncoderDecoder(BaseSegmentor):
     """Encoder Decoder segmentors.
-
     EncoderDecoder typically consists of backbone, decode_head, auxiliary_head.
     Note that auxiliary_head is only used for deep supervision during training,
     which could be dumped during inference.
@@ -58,7 +57,6 @@ class EncoderDecoder(BaseSegmentor):
 
     def init_weights(self, pretrained=None):
         """Initialize the weights in backbone and heads.
-
         Args:
             pretrained (str, optional): Path to pre-trained weights.
                 Defaults to None.
@@ -140,7 +138,6 @@ class EncoderDecoder(BaseSegmentor):
 
     def forward_train(self, img, img_metas, gt_semantic_seg):
         """Forward function for training.
-
         Args:
             img (Tensor): Input images.
             img_metas (list[dict]): List of image info dict where each dict
@@ -150,7 +147,6 @@ class EncoderDecoder(BaseSegmentor):
                 `mmseg/datasets/pipelines/formatting.py:Collect`.
             gt_semantic_seg (Tensor): Semantic segmentation masks
                 used if the architecture supports semantic segmentation task.
-
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
@@ -173,7 +169,6 @@ class EncoderDecoder(BaseSegmentor):
     # TODO refactor
     def slide_inference(self, img, img_meta, rescale):
         """Inference by sliding-window with overlap.
-
         If h_crop > h_img or w_crop > w_img, the small patch will be used to
         decode without padding.
         """
@@ -232,7 +227,6 @@ class EncoderDecoder(BaseSegmentor):
 
     def inference(self, img, img_meta, rescale):
         """Inference with slide/whole style.
-
         Args:
             img (Tensor): The input image of shape (N, 3, H, W).
             img_meta (dict): Image info dict where each dict has: 'img_shape',
@@ -241,7 +235,6 @@ class EncoderDecoder(BaseSegmentor):
                 For details on the values of these keys see
                 `mmseg/datasets/pipelines/formatting.py:Collect`.
             rescale (bool): Whether rescale back to original shape.
-
         Returns:
             Tensor: The output segmentation map.
         """
@@ -311,7 +304,6 @@ class EncoderDecoder(BaseSegmentor):
 
     def aug_test(self, imgs, img_metas, rescale=True):
             """Test with augmentations.
-
             Only rescale=True is supported.
             """
             # aug_test rescale all imgs back to ori_shape for now
@@ -322,9 +314,30 @@ class EncoderDecoder(BaseSegmentor):
                 cur_seg_logit = self.inference(imgs[i], img_metas[i], rescale)
                 seg_logit += cur_seg_logit
             seg_logit /= len(imgs)
+            if self.test_cfg['is_hiera']:
+                if seg_logit.size(1)==26:
+                    seg_logit[:,0:2]+=seg_logit[:,-7]
+                    seg_logit[:,2:5]+=seg_logit[:,-6]
+                    seg_logit[:,5:8]+=seg_logit[:,-5]
+                    seg_logit[:,8:10]+=seg_logit[:,-4]
+                    seg_logit[:,10:11]+=seg_logit[:,-3]
+                    seg_logit[:,11:13]+=seg_logit[:,-2]
+                    seg_logit[:,13:19]+=seg_logit[:,-1]
+                elif seg_logit.size(1)==12:
+                    seg_logit[:,0:1]=seg_logit[:,0:1]+seg_logit[:,7]+seg_logit[:,10]
+                    seg_logit[:,1:5]=seg_logit[:,1:5]+seg_logit[:,8]+seg_logit[:,11]
+                    seg_logit[:,5:7]=seg_logit[:,5:7]+seg_logit[:,9]+seg_logit[:,11]
+                elif seg_logit.size(1)==25:
+                    seg_logit[:,0:1]=seg_logit[:,0:1]+seg_logit[:,20]+seg_logit[:,23]
+                    seg_logit[:,1:8]=seg_logit[:,1:8]+seg_logit[:,21]+seg_logit[:,24]
+                    seg_logit[:,10:12]=seg_logit[:,10:12]+seg_logit[:,21]+seg_logit[:,24]
+                    seg_logit[:,13:16]=seg_logit[:,13:16]+seg_logit[:,21]+seg_logit[:,24]
+                    seg_logit[:,8:10]=seg_logit[:,8:10]+seg_logit[:,22]+seg_logit[:,24]
+                    seg_logit[:,12:13]=seg_logit[:,12:13]+seg_logit[:,22]+seg_logit[:,24]
+                    seg_logit[:,16:20]=seg_logit[:,16:20]+seg_logit[:,22]+seg_logit[:,24]
+                seg_logit = seg_logit[:,:-self.test_cfg['hiera_num_classes']]  
             seg_pred = seg_logit.argmax(dim=1)
             seg_pred = seg_pred.cpu().numpy()
             # unravel batch dim
             seg_pred = list(seg_pred)
             return seg_pred
-
