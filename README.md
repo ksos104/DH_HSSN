@@ -28,13 +28,16 @@ Pytorch >= 1.8.0 & torchvision >= 0.9.0
 ### Inference
 ```
 # single-gpu testing
-python tools/test.py <CONFIG_FILE> <SEG_CHECKPOINT_FILE> --eval mIoU
+# python tools/test.py <CONFIG_FILE> <SEG_CHECKPOINT_FILE> --eval mIoU
+python tools/test.py configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py /mnt/server14_hard0/msson/HSSN_pytorch/output_iter60k+-res101/iter_6000-74.13.pth --eval mIoU --show-dir ./visualization
 
 # multi-gpu testing
 tools/dist_test.sh <CONFIG_FILE> <SEG_CHECKPOINT_FILE> <GPU_NUM> --eval mIoU
 
 # multi-gpu, multi-scale testing
 tools/dist_test.sh <CONFIG_FILE> <SEG_CHECKPOINT_FILE> <GPU_NUM> --aug-test --eval mIoU
+tools/dist_test.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py /mnt/server14_hard0/msson/HSSN_pytorch/output_iter60k+-res101/iter_6000-74.13.pth 4 --aug-test --eval mIoU
+
 ```
 
 ### Training
