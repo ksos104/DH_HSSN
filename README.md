@@ -18,8 +18,6 @@ pip install mmcv==1.6.1
 pip install terminaltables
 ```
 
-Please refer to [get_started.md](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/get_started.md#installation) for installation and dataset preparation.
-
 
 ### Structure
 Follow this structure:
