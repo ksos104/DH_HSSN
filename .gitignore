@@ -130,3 +130,4 @@ result_imgs/
 output_*
 *log*
 checkpoints/
+visualization/

@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'CustomDataset'
-data_root = '/mnt/server14_hard1/msson/datasets/Pascal Part Person'
+data_root = '../datasets/Pascal Part Person'
 # data_root = '/mnt/server14_hard1/msson/datasets/SURREAL/data/ref_cmu'
 # data_root = '/mnt/server14_hard1/msson/datasets/Syn_body/no_gt'
 img_norm_cfg = dict(
