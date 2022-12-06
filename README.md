@@ -38,9 +38,11 @@ Follow this structure:
 ### Inference
 ```
 # single-gpu testing
+# parsing results are saved in ./visualization folder
 python tools/test.py configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py ./iter_6000-74.13.pth --eval mIoU --show-dir ./visualization
 
-# multi-gpu, multi-scale testing (change 4 to the number of GPUs)
+# multi-gpu, multi-scale testing
+# change 4 to the number of GPUs
 tools/dist_test.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py ./iter_6000-74.13.pth 4 --aug-test --eval mIoU
 ```
 
