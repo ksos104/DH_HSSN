@@ -14,21 +14,34 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 pip install -U openmim
 mim install mmcv-full
 pip install mmsegmentation
+pip install mmcv==1.6.1
+pip install terminaltables
 ```
 
 Please refer to [get_started.md](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/get_started.md#installation) for installation and dataset preparation.
 
-Pytorch >= 1.8.0 & torchvision >= 0.9.0
+
+### Structure
+Follow this structure:
+```
+|-- datasets
+        |-- Pascal Part Person
+             |-- train
+             |-- val
+|             
+|-- DH_HSSN
+        |-- iter_6000-74.13.pth
+```
+
 
 
 ### Inference
 ```
 # single-gpu testing
-python tools/test.py configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py /mnt/server14_hard0/msson/HSSN_pytorch/output_iter60k+-res101/iter_6000-74.13.pth --eval mIoU --show-dir ./visualization
+python tools/test.py configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py ./iter_6000-74.13.pth --eval mIoU --show-dir ./visualization
 
-
-# multi-gpu, multi-scale testing
-tools/dist_test.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py /mnt/server14_hard0/msson/HSSN_pytorch/output_iter60k+-res101/iter_6000-74.13.pth 4 --aug-test --eval mIoU
+# multi-gpu, multi-scale testing (change 4 to the number of GPUs)
+tools/dist_test.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py ./iter_6000-74.13.pth 4 --aug-test --eval mIoU
 ```
 
 
@@ -36,7 +49,7 @@ tools/dist_test.sh configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pasca
 
 | Dataset | Backbone | Crop Size | mIoU (single scale) | mIoU (multi scale w/ flipping) | config |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| Pascal-Person-Part | ResNet101 | 480x480 | 73.44 | 75.4 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py) |
+| Pascal-Person-Part | ResNet101 | 480x480 | 74.13 | 75.4 | [config](configs/deeplabv3plus/deeplabv3plus_r101-d8_480x480_60k_pascal_person_part_hiera_triplet.py) |
 
 
 
