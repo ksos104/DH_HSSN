@@ -5,9 +5,11 @@ This repo contains the unoffical supported code and configuration files to repro
 
 ## Usage
 
-### Installation 
+### Settings
 
 ```
+https://github.com/ksos104/DH_HSSN.git
+cd DH_HSSN
 conda create -n hssn python==3.8
 conda activate hssn
 conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
