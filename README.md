@@ -14,11 +14,23 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 pip install -U openmim
 mim install mmcv-full
 pip install mmsegmentation
+pip install mmcv==1.6.1
 ```
 
 Please refer to [get_started.md](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/get_started.md#installation) for installation and dataset preparation.
 
-Pytorch >= 1.8.0 & torchvision >= 0.9.0
+
+### Structure
+Follow this structure:
+```
+|-- datasets
+        |-- Pascal-Person-Part
+             |-- train
+             |-- validation
+|-- DH_HSSN
+        |-- iter_6000-74.13.pth
+```
+
 
 
 ### Inference
